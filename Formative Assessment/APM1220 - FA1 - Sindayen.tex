@@ -1,0 +1,2823 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage[margin=1in]{geometry}
+
+\begin{document}
+    
+\noindent
+\textbf{Name: Sindayen, Lorenzo Danilo V.}
+
+\vspace{0.2cm}
+
+\noindent
+\textbf{APM1220 - Applied Multivariate Data Analysis}
+
+\vspace{0.7cm}
+
+\hrule
+
+\vspace{0.5cm}
+
+\hrule
+
+\vspace{0.7cm}
+
+\noindent
+\textbf{INSTRUCTIONS:}
+
+\vspace{0.1cm}
+
+\noindent
+\begin{itemize}
+    \item Answer all questions completely and show all necessary steps, intermediate calculations, and mathematical proofs clearly to receive full credit.
+
+    \item Where matrix operations are required, ensure that dimensions conform before performing any multiplications, additions, or inversions.
+
+    \item Present all final matrix entries and numerical results in exact, simplified form (e.g., fractions or radicals) unless decimals are specifically requested.
+
+    \item Clearly label your final answers for each sub-problem (a, b, c, etc.).
+\end{itemize}
+
+\vspace{0.3cm}
+
+\noindent
+\textbf{Problem 2.2 (5 points)}
+
+\vspace{0.5cm}
+
+\noindent
+Given the matrices
+
+\[
+A=
+\begin{bmatrix}
+-1 & 3\\
+4 & 2
+\end{bmatrix},
+\qquad
+B=
+\begin{bmatrix}
+4 & -3\\
+1 & -2\\
+-2 & 0
+\end{bmatrix},
+\qquad
+\text{and}
+\qquad
+C=
+\begin{bmatrix}
+5\\
+-4\\
+2
+\end{bmatrix}
+\]
+
+\noindent
+perform the indicated multiplications:
+
+\vspace{0.3cm}
+
+\noindent
+\textbf{(a) \(5A\)}
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{Sol.}
+
+\vspace{0.3cm}
+
+
+\[
+5A
+=
+5
+\begin{bmatrix}
+-1 & 3\\
+4 & 2
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+5(-1) & 5(3)\\
+5(4) & 5(2)
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+-5 & 15\\
+20 & 10
+\end{bmatrix}
+\]
+
+\noindent
+Hence,
+
+\[
+\boxed{
+5A=
+\begin{bmatrix}
+-5 & 15\\
+20 & 10
+\end{bmatrix}
+}
+\]
+
+\vspace{1cm}
+
+\noindent
+\textbf{(b) \(BA\)}
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{Sol.}
+
+\vspace{0.3cm}
+
+\[
+BA
+=
+\begin{bmatrix}
+4 & -3\\
+1 & -2\\
+-2 & 0
+\end{bmatrix}
+\begin{bmatrix}
+-1 & 3\\
+4 & 2
+\end{bmatrix}
+\]
+
+\[
+BA
+=
+\begin{bmatrix}
+4(-1)+(-3)(4) & 4(3)+(-3)(2)\\
+1(-1)+(-2)(4) & 1(3)+(-2)(2)\\
+(-2)(-1)+0(4) & (-2)(3)+0(2)
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+-4-12 & 12-6\\
+-1-8 & 3-4\\
+2+0 & -6+0
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+-16 & 6\\
+-9 & -1\\
+2 & -6
+\end{bmatrix}
+\]
+
+\noindent
+Hence,
+
+\[
+\boxed{
+BA=
+\begin{bmatrix}
+-16 & 6\\
+-9 & -1\\
+2 & -6
+\end{bmatrix}
+}
+\]
+
+\vspace{1cm}
+
+\noindent
+\textbf{(c) \(A'B'\)}
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{Sol.}
+
+\vspace{0.3cm}
+
+\noindent
+The transpose of \(A\) is
+
+\[
+A'
+=
+\begin{bmatrix}
+-1 & 4\\
+3 & 2
+\end{bmatrix}
+\]
+
+\noindent
+and the transpose of \(B\) is
+
+\[
+B'
+=
+\begin{bmatrix}
+4 & 1 & -2\\
+-3 & -2 & 0
+\end{bmatrix}.
+\]
+
+\vspace{0.5cm}
+
+\noindent
+So,
+
+\vspace{0.5cm}
+
+\[
+A'B'
+=
+\begin{bmatrix}
+-1 & 4\\
+3 & 2
+\end{bmatrix}
+\begin{bmatrix}
+4 & 1 & -2\\
+-3 & -2 & 0
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+(-1)(4)+4(-3) &
+(-1)(1)+4(-2) &
+(-1)(-2)+4(0)
+\\
+3(4)+2(-3) &
+3(1)+2(-2) &
+3(-2)+2(0)
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+-4-12 & -1-8 & 2+0\\
+12-6 & 3-4 & -6+0
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+-16 & -9 & 2\\
+6 & -1 & -6
+\end{bmatrix}
+\]
+
+Hence,
+
+\[
+\boxed{
+A'B'
+=
+\begin{bmatrix}
+-16 & -9 & 2\\
+6 & -1 & -6
+\end{bmatrix}
+}
+\]
+
+\vspace{1cm}
+
+\noindent
+\textbf{(d) \(C'B\)}
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{Sol.}
+
+\vspace{0.3cm}
+
+\noindent
+The transpose of \(C\) is
+
+\[
+C'
+=
+\begin{bmatrix}
+5 & -4 & 2
+\end{bmatrix}.
+\]
+
+\noindent
+So,
+
+\[
+C'B
+=
+\begin{bmatrix}
+5 & -4 & 2
+\end{bmatrix}
+\begin{bmatrix}
+4 & -3\\
+1 & -2\\
+-2 & 0
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+5(4)+(-4)(1)+2(-2)
+&
+5(-3)+(-4)(-2)+2(0)
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+20-4-4 & -15+8+0
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+12 & -7
+\end{bmatrix}
+\]
+
+Hence,
+
+\[
+\boxed{
+C'B=
+\begin{bmatrix}
+12 & -7
+\end{bmatrix}
+}
+\]
+
+\vspace{1cm}
+
+\noindent
+\textbf{(e) Is \(AB\) defined?}
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{Sol.}
+
+\vspace{0.3cm}
+
+\noindent
+The dimensions of the matrices are
+
+\[
+A_{2\times2}
+\qquad\text{and}\qquad
+B_{3\times2}.
+\]
+
+\noindent
+For the multiplication \(AB\) to be defined, the number of columns of \(A\) must equal the number of rows of \(B\).
+
+\vspace{0.3cm}
+
+\noindent
+However,
+
+\[
+2\neq3.
+\]
+
+\vspace{0.7cm}
+
+\noindent
+Therefore, the dimensions do not conform for matrix multiplication.
+
+\noindent
+Hence,
+
+\[
+\boxed{
+AB\text{ is not defined.}
+}
+\]
+
+\vspace{1cm}
+
+\hrule
+
+\vspace{0.7cm}
+
+\noindent
+\textbf{Problem 2.4 (6 points)}
+
+\vspace{0.5cm}
+
+\noindent
+When \(A^{-1}\) and \(B^{-1}\) exist, prove each of the following:
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{(a) \((A')^{-1}=(A^{-1})'\)}
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{Sol.}
+
+\vspace{0.3cm}
+
+\noindent
+Since \(A^{-1}\) exists,
+
+\[
+AA^{-1}=I
+\]
+
+\noindent
+Transpose both sides
+
+\[
+(AA^{-1})'=I'
+\]
+
+\noindent
+Using the property
+
+\[
+(AB)'=B'A'
+\]
+
+\noindent
+we have
+
+\[
+(A^{-1})'A'=I'
+\]
+
+\noindent
+Since the transpose of the identity matrix is itself,
+
+\[
+I'=I
+\]
+
+\noindent
+Thus,
+
+\[
+(A^{-1})'A'=I
+\]
+
+\noindent
+Since
+
+\[
+A^{-1}A=I
+\]
+
+\noindent
+taking the transpose gives
+
+\[
+(A^{-1}A)'=I'
+\]
+
+\noindent
+Therefore,
+
+\[
+A'(A^{-1})'=I
+\]
+
+\noindent
+Hence, \((A^{-1})'\) is the inverse of \(A'\) and,
+
+\[
+\boxed{
+(A')^{-1}=(A^{-1})'
+}
+\]
+
+\vspace{1cm}
+
+\noindent
+\textbf{(b) \((AB)^{-1}=B^{-1}A^{-1}\)}
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{Sol.}
+
+\vspace{0.3cm}
+
+\noindent
+Consider the product
+
+\[
+(B^{-1}A^{-1})AB
+\]
+
+\noindent
+Using the associative property of matrix multiplication
+
+\[
+(B^{-1}A^{-1})AB
+=
+B^{-1}(A^{-1}A)B
+\]
+
+\noindent
+Since
+
+\[
+A^{-1}A=I
+\]
+
+\noindent
+we have
+
+\[
+B^{-1}(A^{-1}A)B
+=
+B^{-1}IB
+\]
+
+\noindent
+Since multiplication by the identity matrix does not change a matrix
+
+\[
+B^{-1}IB
+=
+B^{-1}B
+\]
+
+\noindent
+Since
+
+\[
+B^{-1}B=I
+\]
+
+\noindent
+we obtain
+
+\[
+(B^{-1}A^{-1})AB
+=
+I
+\]
+
+\noindent
+Now consider the product in the opposite order
+
+\[
+AB(B^{-1}A^{-1})
+\]
+
+\noindent
+Using the associative property
+
+\[
+AB(B^{-1}A^{-1})
+=
+A(BB^{-1})A^{-1}
+\]
+
+\noindent
+Since
+
+\[
+BB^{-1}=I
+\]
+
+\noindent
+we have
+
+\[
+A(BB^{-1})A^{-1}
+=
+AIA^{-1}
+\]
+
+\noindent
+Since multiplication by the identity matrix does not change a matrix
+
+\[
+AIA^{-1}
+=
+AA^{-1}
+\]
+
+\noindent
+Since
+
+\[
+AA^{-1}=I
+\]
+
+\noindent
+we obtain
+
+\[
+AB(B^{-1}A^{-1})
+=
+I
+\]
+
+\noindent
+Therefore \(B^{-1}A^{-1}\) is the inverse of \(AB\)
+
+\vspace{0.7cm}
+
+\noindent
+Hence
+
+\[
+\boxed{
+(AB)^{-1}=B^{-1}A^{-1}
+}
+\]
+
+\vspace{1cm}
+
+\hrule
+
+\vspace{0.7cm}
+
+\noindent
+\textbf{Problem 2.8 (6 points)}
+
+\vspace{0.5cm}
+
+\noindent
+Given the matrix
+
+\[
+A=
+\begin{bmatrix}
+1 & 2\\
+2 & -2
+\end{bmatrix}
+\]
+
+\noindent
+find the eigenvalues \(\lambda_1\) and \(\lambda_2\) and the associated normalized eigenvectors \(e_1\) and \(e_2\)
+
+\noindent
+Determine the spectral decomposition (2-16) of \(A\)
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{Sol.}
+
+\vspace{0.3cm}
+
+\noindent
+To find the eigenvalues solve the characteristic equation
+
+\[
+|A-\lambda I|=0
+\]
+
+\[
+\begin{vmatrix}
+1-\lambda & 2\\
+2 & -2-\lambda
+\end{vmatrix}
+=0
+\]
+
+\[
+(1-\lambda)(-2-\lambda)-4=0
+\]
+
+\[
+-2-\lambda+2\lambda+\lambda^2-4=0
+\]
+
+\[
+\lambda^2+\lambda-6=0
+\]
+
+\[
+(\lambda-2)(\lambda+3)=0
+\]
+
+\noindent
+Hence,
+
+\[
+\boxed{
+\lambda_1=2
+\qquad
+\lambda_2=-3
+}
+\]
+
+\vspace{0.7cm}
+
+\noindent
+\textbf{Finding the eigenvector associated with \(\lambda_1=2\)}
+
+\vspace{0.3cm}
+
+\noindent
+Solve
+
+\[
+(A-2I)e_1=0
+\]
+
+\[
+A-2I
+=
+\begin{bmatrix}
+1-2 & 2\\
+2 & -2-2
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+-1 & 2\\
+2 & -4
+\end{bmatrix}
+\]
+
+\noindent
+Let
+
+\[
+e_1=
+\begin{bmatrix}
+x\\
+y
+\end{bmatrix}
+\]
+
+\noindent
+Then
+
+\[
+\begin{bmatrix}
+-1 & 2\\
+2 & -4
+\end{bmatrix}
+\begin{bmatrix}
+x\\
+y
+\end{bmatrix}
+=
+\begin{bmatrix}
+0\\
+0
+\end{bmatrix}
+\]
+
+\noindent
+Using the first equation
+
+\[
+-x+2y=0
+\]
+
+\[
+x=2y
+\]
+
+\noindent
+Let
+
+\[
+y=1
+\]
+
+\noindent
+Then
+
+\[
+x=2
+\]
+
+\noindent
+An eigenvector corresponding to \(\lambda_1=2\) is
+
+\[
+\begin{bmatrix}
+2\\
+1
+\end{bmatrix}
+\]
+
+\noindent
+The length of the eigenvector is
+
+\[
+\sqrt{2^2+1^2}
+\]
+
+\[
+=\sqrt{5}
+\]
+
+\noindent
+Hence,
+
+\[
+\boxed{
+e_1=
+\frac{1}{\sqrt{5}}
+\begin{bmatrix}
+2\\
+1
+\end{bmatrix}
+}
+\]
+
+\vspace{0.7cm}
+
+\noindent
+\textbf{Finding the eigenvector associated with \(\lambda_2=-3\)}
+
+\vspace{0.3cm}
+
+\noindent
+Solve
+
+\[
+(A+3I)e_2=0
+\]
+
+\[
+A+3I
+=
+\begin{bmatrix}
+1+3 & 2\\
+2 & -2+3
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+4 & 2\\
+2 & 1
+\end{bmatrix}
+\]
+
+\noindent
+Let
+
+\[
+e_2=
+\begin{bmatrix}
+x\\
+y
+\end{bmatrix}
+\]
+
+\noindent
+Then
+
+\[
+\begin{bmatrix}
+4 & 2\\
+2 & 1
+\end{bmatrix}
+\begin{bmatrix}
+x\\
+y
+\end{bmatrix}
+=
+\begin{bmatrix}
+0\\
+0
+\end{bmatrix}
+\]
+
+\noindent
+Using the first equation
+
+\[
+4x+2y=0
+\]
+
+\[
+2x+y=0
+\]
+
+\[
+y=-2x
+\]
+
+\noindent
+Let
+
+\[
+x=1
+\]
+
+\noindent
+Then
+
+\[
+y=-2
+\]
+
+\noindent
+An eigenvector corresponding to \(\lambda_2=-3\) is
+
+\[
+\begin{bmatrix}
+1\\
+-2
+\end{bmatrix}
+\]
+
+\noindent
+The length of the eigenvector is
+
+\[
+\sqrt{1^2+(-2)^2}
+\]
+
+\[
+=\sqrt{5}
+\]
+
+\noindent
+Hence,
+
+\[
+\boxed{
+e_2=
+\frac{1}{\sqrt{5}}
+\begin{bmatrix}
+1\\
+-2
+\end{bmatrix}
+}
+\]
+
+\vspace{0.7cm}
+
+\noindent
+\textbf{Finding the spectral decomposition}
+
+\vspace{0.3cm}
+
+\noindent
+Since \(A\) is symmetric its spectral decomposition is
+
+\[
+A
+=
+\lambda_1e_1e_1'
++
+\lambda_2e_2e_2'
+\]
+
+\noindent
+Substituting the eigenvalues and normalized eigenvectors
+
+\[
+A
+=
+2e_1e_1'
+-
+3e_2e_2'
+\]
+
+\noindent
+First calculate \(e_1e_1'\)
+
+\[
+e_1e_1'
+=
+\frac{1}{\sqrt{5}}
+\begin{bmatrix}
+2\\
+1
+\end{bmatrix}
+\frac{1}{\sqrt{5}}
+\begin{bmatrix}
+2 & 1
+\end{bmatrix}
+\]
+
+\[
+=
+\frac{1}{5}
+\begin{bmatrix}
+2\\
+1
+\end{bmatrix}
+\begin{bmatrix}
+2 & 1
+\end{bmatrix}
+\]
+
+\[
+=
+\frac{1}{5}
+\begin{bmatrix}
+4 & 2\\
+2 & 1
+\end{bmatrix}
+\]
+
+\noindent
+Now calculate \(e_2e_2'\)
+
+\[
+e_2e_2'
+=
+\frac{1}{\sqrt{5}}
+\begin{bmatrix}
+1\\
+-2
+\end{bmatrix}
+\frac{1}{\sqrt{5}}
+\begin{bmatrix}
+1 & -2
+\end{bmatrix}
+\]
+
+\[
+=
+\frac{1}{5}
+\begin{bmatrix}
+1\\
+-2
+\end{bmatrix}
+\begin{bmatrix}
+1 & -2
+\end{bmatrix}
+\]
+
+\[
+=
+\frac{1}{5}
+\begin{bmatrix}
+1 & -2\\
+-2 & 4
+\end{bmatrix}
+\]
+
+\noindent
+Therefore,
+
+\[
+A
+=
+2
+\left(
+\frac{1}{5}
+\begin{bmatrix}
+4 & 2\\
+2 & 1
+\end{bmatrix}
+\right)
+-
+3
+\left(
+\frac{1}{5}
+\begin{bmatrix}
+1 & -2\\
+-2 & 4
+\end{bmatrix}
+\right)
+\]
+
+\[
+=
+\frac{1}{5}
+\begin{bmatrix}
+8 & 4\\
+4 & 2
+\end{bmatrix}
+-
+\frac{1}{5}
+\begin{bmatrix}
+3 & -6\\
+-6 & 12
+\end{bmatrix}
+\]
+
+\[
+=
+\frac{1}{5}
+\left[
+\begin{bmatrix}
+8 & 4\\
+4 & 2
+\end{bmatrix}
+-
+\begin{bmatrix}
+3 & -6\\
+-6 & 12
+\end{bmatrix}
+\right]
+\]
+
+\[
+=
+\frac{1}{5}
+\begin{bmatrix}
+5 & 10\\
+10 & -10
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+1 & 2\\
+2 & -2
+\end{bmatrix}
+\]
+
+\noindent
+Hence,
+
+\[
+\boxed{
+A
+=
+2e_1e_1'
+-
+3e_2e_2'
+}
+\]
+
+\noindent
+where
+
+\[
+\boxed{
+e_1=
+\frac{1}{\sqrt{5}}
+\begin{bmatrix}
+2\\
+1
+\end{bmatrix}
+\qquad
+e_2=
+\frac{1}{\sqrt{5}}
+\begin{bmatrix}
+1\\
+-2
+\end{bmatrix}
+}
+\]
+
+\vspace{1cm}
+
+\hrule
+
+\vspace{0.7cm}
+
+\noindent
+\textbf{Problem 2.11 (5 points)}
+
+\vspace{0.5cm}
+
+\noindent
+Show that the determinant of the \(p\times p\) diagonal matrix \(A=\{a_{ij}\}\) with \(a_{ij}=0\) for \(i\neq j\) is given by the product of the diagonal elements
+
+\[
+|A|=a_{11}a_{22}\cdots a_{pp}
+\]
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{Sol.}
+
+\vspace{0.3cm}
+
+\noindent
+Consider the \(p\times p\) diagonal matrix
+
+\[
+A=
+\begin{bmatrix}
+a_{11} & 0 & 0 & \cdots & 0\\
+0 & a_{22} & 0 & \cdots & 0\\
+0 & 0 & a_{33} & \cdots & 0\\
+\vdots & \vdots & \vdots & \ddots & \vdots\\
+0 & 0 & 0 & \cdots & a_{pp}
+\end{bmatrix}
+\]
+
+\noindent
+By the definition of the determinant expand along the first row
+
+\[
+|A|
+=
+a_{11}A_{11}
++
+0
++\cdots+
+0
+\]
+
+\[
+|A|
+=
+a_{11}A_{11}
+\]
+
+\noindent
+Delete the first row and first column
+
+\[
+A_{11}
+=
+\begin{vmatrix}
+a_{22} & 0 & \cdots & 0\\
+0 & a_{33} & \cdots & 0\\
+\vdots & \vdots & \ddots & \vdots\\
+0 & 0 & \cdots & a_{pp}
+\end{vmatrix}
+\]
+
+\noindent
+Expand along the first row
+
+\[
+A_{11}
+=
+a_{22}A_{22}
+\]
+
+\noindent
+Substitute into the determinant of \(A\)
+
+\[
+|A|
+=
+a_{11}a_{22}A_{22}
+\]
+
+\[
+|A|
+=
+a_{11}a_{22}a_{33}\cdots a_{pp}
+\]
+
+\noindent
+Hence, the determinant of a diagonal matrix is the product of its diagonal elements
+
+\[
+\boxed{
+|A|
+=
+a_{11}a_{22}\cdots a_{pp}
+}
+\]
+
+\vspace{1cm}
+
+\hrule
+
+\vspace{0.7cm}
+
+\noindent
+\textbf{Problem 2.24 (5 points)}
+
+\vspace{0.5cm}
+
+\noindent
+Let \(X\) have covariance matrix
+
+\[
+\Sigma
+=
+\begin{bmatrix}
+4 & 0 & 0\\
+0 & 9 & 0\\
+0 & 0 & 1
+\end{bmatrix}
+\]
+
+\noindent
+Find:
+
+\begin{flalign*}
+\textbf{(a) } \Sigma^{-1} &&
+\end{flalign*}
+
+\begin{flalign*}
+\textbf{(b) The eigenvalues and eigenvectors of } \Sigma &&
+\end{flalign*}
+
+\begin{flalign*}
+\textbf{(c) The eigenvalues and eigenvectors of } \Sigma^{-1} &&
+\end{flalign*}
+
+\vspace{1.0cm}
+
+\noindent
+\textbf{Answers: }
+
+\vspace{1.0cm}
+
+\noindent
+\textbf{(a) \(\Sigma^{-1}\)}
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{Sol.}
+
+\vspace{0.3cm}
+
+\noindent
+Since \(\Sigma\) is a diagonal matrix its inverse is obtained by taking the reciprocal of each diagonal element
+
+\vspace{0.3cm}
+
+\noindent
+Hence,
+
+\[
+\boxed{
+\Sigma^{-1}
+=
+\begin{bmatrix}
+\frac{1}{4} & 0 & 0\\
+0 & \frac{1}{9} & 0\\
+0 & 0 & 1
+\end{bmatrix}
+}
+\]
+
+\vspace{1cm}
+
+\noindent
+\textbf{(b) The eigenvalues and eigenvectors of \(\Sigma\)}
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{Sol.}
+
+\vspace{0.3cm}
+
+\noindent
+Solve for
+
+\[
+|\Sigma-\lambda I|=0
+\]
+
+\[
+\begin{vmatrix}
+4-\lambda & 0 & 0\\
+0 & 9-\lambda & 0\\
+0 & 0 & 1-\lambda
+\end{vmatrix}
+=
+0
+\]
+
+\[
+(4-\lambda)(9-\lambda)(1-\lambda)=0
+\]
+
+\noindent
+Hence, the eigenvalues are
+
+\[
+\boxed{
+\lambda_1=4
+\qquad
+\lambda_2=9
+\qquad
+\lambda_3=1
+}
+\]
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{Eigenvector corresponding to \(\lambda_1=4\)}
+
+\vspace{0.3cm}
+
+\noindent
+Solve for
+
+\[
+(\Sigma-4I)e_1=0
+\]
+
+\[
+\begin{bmatrix}
+0 & 0 & 0\\
+0 & 5 & 0\\
+0 & 0 & -3
+\end{bmatrix}
+\begin{bmatrix}
+x\\
+y\\
+z
+\end{bmatrix}
+=
+\begin{bmatrix}
+0\\
+0\\
+0
+\end{bmatrix}
+\]
+
+\noindent
+This gives
+
+\[
+5y=0
+\]
+
+\[
+-3z=0
+\]
+
+\[
+y=0
+\qquad
+z=0
+\]
+
+\noindent
+Let
+
+\[
+x=1
+\]
+
+\noindent
+Hence,
+
+\[
+\boxed{
+e_1=
+\begin{bmatrix}
+1\\
+0\\
+0
+\end{bmatrix}
+}
+\]
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{Eigenvector corresponding to \(\lambda_2=9\)}
+
+\vspace{0.3cm}
+
+\noindent
+Solve for
+
+\[
+(\Sigma-9I)e_2=0
+\]
+
+\[
+\begin{bmatrix}
+-5 & 0 & 0\\
+0 & 0 & 0\\
+0 & 0 & -8
+\end{bmatrix}
+\begin{bmatrix}
+x\\
+y\\
+z
+\end{bmatrix}
+=
+\begin{bmatrix}
+0\\
+0\\
+0
+\end{bmatrix}
+\]
+
+\noindent
+This gives
+
+\[
+-5x=0
+\]
+
+\[
+-8z=0
+\]
+
+\[
+x=0
+\qquad
+z=0
+\]
+
+\noindent
+Let
+
+\[
+y=1
+\]
+
+\noindent
+Hence,
+
+\[
+\boxed{
+e_2=
+\begin{bmatrix}
+0\\
+1\\
+0
+\end{bmatrix}
+}
+\]
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{Eigenvector corresponding to \(\lambda_3=1\)}
+
+\vspace{0.3cm}
+
+\noindent
+Solve for
+
+\[
+(\Sigma-I)e_3=0
+\]
+
+\[
+\begin{bmatrix}
+3 & 0 & 0\\
+0 & 8 & 0\\
+0 & 0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+x\\
+y\\
+z
+\end{bmatrix}
+=
+\begin{bmatrix}
+0\\
+0\\
+0
+\end{bmatrix}
+\]
+
+\noindent
+This gives
+
+\[
+3x=0
+\]
+
+\[
+8y=0
+\]
+
+\[
+x=0
+\qquad
+y=0
+\]
+
+\noindent
+Let
+
+\[
+z=1
+\]
+
+\noindent
+Hence,
+
+\[
+\boxed{
+e_3=
+\begin{bmatrix}
+0\\
+0\\
+1
+\end{bmatrix}
+}
+\]
+
+\vspace{0.5cm}
+
+\noindent
+Hence, the eigenvalues and corresponding eigenvectors of \(\Sigma\) are
+
+\[
+\boxed{
+\lambda_1=4
+\qquad
+e_1=
+\begin{bmatrix}
+1\\
+0\\
+0
+\end{bmatrix}
+}
+\]
+
+\[
+\boxed{
+\lambda_2=9
+\qquad
+e_2=
+\begin{bmatrix}
+0\\
+1\\
+0
+\end{bmatrix}
+}
+\]
+
+\[
+\boxed{
+\lambda_3=1
+\qquad
+e_3=
+\begin{bmatrix}
+0\\
+0\\
+1
+\end{bmatrix}
+}
+\]
+
+\vspace{1cm}
+
+\noindent
+\textbf{(c) The eigenvalues and eigenvectors of \(\Sigma^{-1}\)}
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{Sol.}
+
+\vspace{0.3cm}
+
+\[
+\Sigma^{-1}
+=
+\begin{bmatrix}
+\frac{1}{4} & 0 & 0\\
+0 & \frac{1}{9} & 0\\
+0 & 0 & 1
+\end{bmatrix}
+\]
+
+\noindent
+Since the eigenvalues of the inverse of a matrix are the reciprocals of the nonzero eigenvalues of the original matrix
+
+\[
+\lambda_1^*
+=
+\frac{1}{4}
+\]
+
+\[
+\lambda_2^*
+=
+\frac{1}{9}
+\]
+
+\[
+\lambda_3^*
+=
+1
+\]
+
+\noindent
+The eigenvectors remain unchanged because
+
+\[
+\Sigma e_i=\lambda_i e_i
+\]
+
+\[
+\Sigma^{-1}e_i
+=
+\frac{1}{\lambda_i}e_i
+\]
+
+\noindent
+Hence,
+
+\[
+\boxed{
+\lambda_1^*=\frac{1}{4}
+\qquad
+e_1=
+\begin{bmatrix}
+1\\
+0\\
+0
+\end{bmatrix}
+}
+\]
+
+\[
+\boxed{
+\lambda_2^*=\frac{1}{9}
+\qquad
+e_2=
+\begin{bmatrix}
+0\\
+1\\
+0
+\end{bmatrix}
+}
+\]
+
+\[
+\boxed{
+\lambda_3^*=1
+\qquad
+e_3=
+\begin{bmatrix}
+0\\
+0\\
+1
+\end{bmatrix}
+}
+\]
+
+\vspace{1cm}
+
+\hrule
+
+\vspace{0.7cm}
+
+\noindent
+\textbf{Problem 2.30 (8 points)}
+
+\vspace{0.5cm}
+
+\noindent
+You are given the random vector
+
+\[
+X'
+=
+[X_1,X_2,X_3,X_4]
+\]
+
+\noindent
+with mean vector
+
+\[
+\mu_X'
+=
+[4,3,2,1]
+\]
+
+\noindent
+and variance-covariance matrix
+
+\[
+\Sigma_X
+=
+\begin{bmatrix}
+3 & 0 & 2 & 2\\
+0 & 1 & 1 & 0\\
+2 & 1 & 9 & -2\\
+2 & 0 & -2 & 4
+\end{bmatrix}
+\]
+
+\noindent
+Partition \(X\) as
+
+\[
+X
+=
+\begin{bmatrix}
+X_1\\
+X_2\\
+X_3\\
+X_4
+\end{bmatrix}
+=
+\begin{bmatrix}
+X^{(1)}\\
+X^{(2)}
+\end{bmatrix}
+\]
+
+\noindent
+Let
+
+\[
+A=
+\begin{bmatrix}
+1 & 2
+\end{bmatrix}
+\]
+
+\noindent
+and
+
+\[
+B=
+\begin{bmatrix}
+1 & -2\\
+2 & -1
+\end{bmatrix}
+\]
+
+\noindent
+and consider the linear combinations \(AX^{(1)}\) and \(BX^{(2)}\)
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{(a) \(E(X^{(1)})\)}
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{Sol.}
+
+\vspace{0.3cm}
+
+\noindent
+The first two elements of the mean vector form the mean vector of \(X^{(1)}\)
+
+\vspace{0.5cm}
+
+\noindent
+Hence,
+
+\[
+\boxed{
+E(X^{(1)})
+=
+\begin{bmatrix}
+4\\
+3
+\end{bmatrix}
+}
+\]
+
+\vspace{1cm}
+
+\noindent
+\textbf{(b) \(E(AX^{(1)})\)}
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{Sol.}
+
+\vspace{0.3cm}
+
+\noindent
+Using the property
+
+\[
+E(AX^{(1)})
+=
+AE(X^{(1)})
+\]
+
+\[
+E(AX^{(1)})
+=
+\begin{bmatrix}
+1 & 2
+\end{bmatrix}
+\begin{bmatrix}
+4\\
+3
+\end{bmatrix}
+\]
+
+\[
+=
+1(4)+2(3)
+\]
+
+\[
+=
+4+6
+\]
+
+\[
+=
+10
+\]
+
+\noindent
+Hence,
+
+\[
+\boxed{
+E(AX^{(1)})=10
+}
+\]
+
+\vspace{1cm}
+
+\noindent
+\textbf{(c) \(\operatorname{Cov}(X^{(1)})\)}
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{Sol.}
+
+\vspace{0.3cm}
+
+\noindent
+The covariance matrix of \(X^{(1)}\) is the upper-left \(2\times2\) submatrix of \(\Sigma_X\)
+
+\[
+\boxed{
+\operatorname{Cov}(X^{(1)})
+=
+\begin{bmatrix}
+3 & 0\\
+0 & 1
+\end{bmatrix}
+}
+\]
+
+\vspace{1cm}
+
+\noindent
+\textbf{(d) \(\operatorname{Cov}(AX^{(1)})\)}
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{Sol.}
+
+\vspace{0.3cm}
+
+\noindent
+Using the property
+
+\[
+\operatorname{Cov}(AX^{(1)})
+=
+A\operatorname{Cov}(X^{(1)})A'
+\]
+
+\[
+\operatorname{Cov}(AX^{(1)})
+=
+\begin{bmatrix}
+1 & 2
+\end{bmatrix}
+\begin{bmatrix}
+3 & 0\\
+0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+1\\
+2
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+1 & 2
+\end{bmatrix}
+\begin{bmatrix}
+3 & 0\\
+0 & 2
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+3 & 4
+\end{bmatrix}
+\begin{bmatrix}
+1\\
+2
+\end{bmatrix}
+\]
+
+\[
+=
+3(1)+4(2)
+\]
+
+\[
+=
+3+8
+\]
+
+\[
+=
+11
+\]
+
+\noindent
+Hence,
+
+\[
+\boxed{
+\operatorname{Cov}(AX^{(1)})=11
+}
+\]
+
+\vspace{1cm}
+
+\noindent
+\textbf{(e) \(E(X^{(2)})\)}
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{Sol.}
+
+\vspace{0.3cm}
+
+\noindent
+The last two elements of the mean vector form the mean vector of \(X^{(2)}\)
+
+\vspace{0.3cm}
+
+\noindent
+Hence,
+
+\vspace{0.3cm}
+
+\[
+\boxed{
+E(X^{(2)})
+=
+\begin{bmatrix}
+2\\
+1
+\end{bmatrix}
+}
+\]
+
+\vspace{1cm}
+
+\noindent
+\textbf{(f) \(E(BX^{(2)})\)}
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{Sol.}
+
+\vspace{0.3cm}
+
+\noindent
+Using the property
+
+\[
+E(BX^{(2)})
+=
+BE(X^{(2)})
+\]
+
+\[
+E(BX^{(2)})
+=
+\begin{bmatrix}
+1 & -2\\
+2 & -1
+\end{bmatrix}
+\begin{bmatrix}
+2\\
+1
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+1(2)+(-2)(1)\\
+2(2)+(-1)(1)
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+2-2\\
+4-1
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+0\\
+3
+\end{bmatrix}
+\]
+
+\noindent
+Hence,
+
+\[
+\boxed{
+E(BX^{(2)})
+=
+\begin{bmatrix}
+0\\
+3
+\end{bmatrix}
+}
+\]
+
+\vspace{1cm}
+
+\noindent
+\textbf{(g) \(\operatorname{Cov}(X^{(2)})\)}
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{Sol.}
+
+\vspace{0.3cm}
+
+\noindent
+The covariance matrix of \(X^{(2)}\) is the lower-right \(2\times2\) submatrix of \(\Sigma_X\)
+
+\vspace{0.3cm}
+
+\noindent
+Hence,
+
+\vspace{0.3cm}
+
+\[
+\boxed{
+\operatorname{Cov}(X^{(2)})
+=
+\begin{bmatrix}
+9 & -2\\
+-2 & 4
+\end{bmatrix}
+}
+\]
+
+\vspace{1cm}
+
+\noindent
+\textbf{(h) \(\operatorname{Cov}(BX^{(2)})\)}
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{Sol.}
+
+\vspace{0.3cm}
+
+\noindent
+Using the property
+
+\[
+\operatorname{Cov}(BX^{(2)})
+=
+B\operatorname{Cov}(X^{(2)})B'
+\]
+
+\[
+\operatorname{Cov}(BX^{(2)})
+=
+\begin{bmatrix}
+1 & -2\\
+2 & -1
+\end{bmatrix}
+\begin{bmatrix}
+9 & -2\\
+-2 & 4
+\end{bmatrix}
+\begin{bmatrix}
+1 & 2\\
+-2 & -1
+\end{bmatrix}
+\]
+
+\[
+B\operatorname{Cov}(X^{(2)})
+=
+\begin{bmatrix}
+1(9)+(-2)(-2) & 1(-2)+(-2)(4)\\
+2(9)+(-1)(-2) & 2(-2)+(-1)(4)
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+9+4 & -2-8\\
+18+2 & -4-4
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+13 & -10\\
+20 & -8
+\end{bmatrix}
+\]
+
+\noindent
+Therefore,
+
+\[
+\operatorname{Cov}(BX^{(2)})
+=
+\begin{bmatrix}
+13 & -10\\
+20 & -8
+\end{bmatrix}
+\begin{bmatrix}
+1 & 2\\
+-2 & -1
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+13(1)+(-10)(-2) &
+13(2)+(-10)(-1)
+\\
+20(1)+(-8)(-2) &
+20(2)+(-8)(-1)
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+13+20 & 26+10\\
+20+16 & 40+8
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+33 & 36\\
+36 & 48
+\end{bmatrix}
+\]
+
+\noindent
+Hence,
+
+\[
+\boxed{
+\operatorname{Cov}(BX^{(2)})
+=
+\begin{bmatrix}
+33 & 36\\
+36 & 48
+\end{bmatrix}
+}
+\]
+
+\vspace{1cm}
+
+\noindent
+\textbf{(i) \(\operatorname{Cov}(X^{(1)},X^{(2)})\)}
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{Sol.}
+
+\vspace{0.3cm}
+
+\noindent
+The covariance matrix between \(X^{(1)}\) and \(X^{(2)}\) is the upper-right \(2\times2\) block of \(\Sigma_X\)
+
+\vspace{0.3cm}
+
+\noindent
+Hence,
+
+\vspace{0.3cm}
+
+\[
+\boxed{
+\operatorname{Cov}(X^{(1)},X^{(2)})
+=
+\begin{bmatrix}
+2 & 2\\
+1 & 0
+\end{bmatrix}
+}
+\]
+
+\vspace{1cm}
+
+\noindent
+\textbf{(j) \(\operatorname{Cov}(AX^{(1)},BX^{(2)})\)}
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{Sol.}
+
+\vspace{0.3cm}
+
+\noindent
+Using the covariance transformation property
+
+\[
+\operatorname{Cov}(AX^{(1)},BX^{(2)})
+=
+A\operatorname{Cov}(X^{(1)},X^{(2)})B'
+\]
+
+\[
+=
+\begin{bmatrix}
+1 & 2
+\end{bmatrix}
+\begin{bmatrix}
+2 & 2\\
+1 & 0
+\end{bmatrix}
+\begin{bmatrix}
+1 & 2\\
+-2 & -1
+\end{bmatrix}
+\]
+
+\[
+A\operatorname{Cov}(X^{(1)},X^{(2)})
+=
+\begin{bmatrix}
+1 & 2
+\end{bmatrix}
+\begin{bmatrix}
+2 & 2\\
+1 & 0
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+1(2)+2(1) &
+1(2)+2(0)
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+4 & 2
+\end{bmatrix}
+\]
+
+\noindent
+Therefore,
+
+\[
+\operatorname{Cov}(AX^{(1)},BX^{(2)})
+=
+\begin{bmatrix}
+4 & 2
+\end{bmatrix}
+\begin{bmatrix}
+1 & 2\\
+-2 & -1
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+4(1)+2(-2) &
+4(2)+2(-1)
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+4-4 & 8-2
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+0 & 6
+\end{bmatrix}
+\]
+
+\noindent
+Hence,
+
+\[
+\boxed{
+\operatorname{Cov}(AX^{(1)},BX^{(2)})
+=
+\begin{bmatrix}
+0 & 6
+\end{bmatrix}
+}
+\]
+
+\vspace{1cm}
+
+\hrule
+
+\vspace{0.7cm}
+
+\noindent
+\textbf{Problem 2.41 (5 points)}
+
+\vspace{0.5cm}
+
+\noindent
+You are given the random vector
+
+\[
+X'
+=
+[X_1,X_2,X_3,X_4]
+\]
+
+\noindent
+with mean vector
+
+\[
+\mu_X'
+=
+[3,2,-2,0]
+\]
+
+\noindent
+and variance-covariance matrix
+
+\[
+\Sigma_X
+=
+\begin{bmatrix}
+3 & 0 & 0 & 0\\
+0 & 3 & 0 & 0\\
+0 & 0 & 3 & 0\\
+0 & 0 & 0 & 3
+\end{bmatrix}
+\]
+
+\noindent
+Let
+
+\[
+A
+=
+\begin{bmatrix}
+1 & -1 & 0 & 0\\
+1 & 1 & -2 & 0\\
+1 & 1 & 1 & -3
+\end{bmatrix}
+\]
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{(a) Find \(E(AX)\), the mean of \(AX\)}
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{Sol.}
+
+\vspace{0.3cm}
+
+\noindent
+Using the property
+
+\[
+E(AX)
+=
+AE(X)
+\]
+
+\[
+E(AX)
+=
+\begin{bmatrix}
+1 & -1 & 0 & 0\\
+1 & 1 & -2 & 0\\
+1 & 1 & 1 & -3
+\end{bmatrix}
+\begin{bmatrix}
+3\\
+2\\
+-2\\
+0
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+1(3)+(-1)(2)+0(-2)+0(0)\\
+1(3)+1(2)+(-2)(-2)+0(0)\\
+1(3)+1(2)+1(-2)+(-3)(0)
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+3-2\\
+3+2+4\\
+3+2-2
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+1\\
+9\\
+3
+\end{bmatrix}
+\]
+
+\noindent
+Hence,
+
+\[
+\boxed{
+E(AX)
+=
+\begin{bmatrix}
+1\\
+9\\
+3
+\end{bmatrix}
+}
+\]
+
+\vspace{1cm}
+
+\noindent
+\textbf{(b) Find \(\operatorname{Cov}(AX)\), the variances and covariances of \(AX\)}
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{Sol.}
+
+\vspace{0.3cm}
+
+\noindent
+Using the covariance transformation property
+
+\[
+\operatorname{Cov}(AX)
+=
+A\Sigma_XA'
+\]
+
+\noindent
+Since
+
+\[
+\Sigma_X
+=
+3I
+\]
+
+\noindent
+we have
+
+\[
+\operatorname{Cov}(AX)
+=
+3AA'
+\]
+
+\noindent
+First calculate \(AA'\)
+
+\[
+AA'
+=
+\begin{bmatrix}
+1 & -1 & 0 & 0\\
+1 & 1 & -2 & 0\\
+1 & 1 & 1 & -3
+\end{bmatrix}
+\begin{bmatrix}
+1 & 1 & 1\\
+-1 & 1 & 1\\
+0 & -2 & 1\\
+0 & 0 & -3
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+1(1)+(-1)(-1)+0(0)+0(0)
+&
+1(1)+(-1)(1)+0(-2)+0(0)
+&
+1(1)+(-1)(1)+0(1)+0(-3)
+\\
+1(1)+1(-1)+(-2)(0)+0(0)
+&
+1(1)+1(1)+(-2)(-2)+0(0)
+&
+1(1)+1(1)+(-2)(1)+0(-3)
+\\
+1(1)+1(-1)+1(0)+(-3)(0)
+&
+1(1)+1(1)+1(-2)+(-3)(0)
+&
+1(1)+1(1)+1(1)+(-3)(-3)
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+2 & 0 & 0\\
+0 & 6 & 0\\
+0 & 0 & 12
+\end{bmatrix}
+\]
+
+\noindent
+Hence,
+
+\[
+\operatorname{Cov}(AX)
+=
+3
+\begin{bmatrix}
+2 & 0 & 0\\
+0 & 6 & 0\\
+0 & 0 & 12
+\end{bmatrix}
+\]
+
+\[
+=
+\begin{bmatrix}
+6 & 0 & 0\\
+0 & 18 & 0\\
+0 & 0 & 36
+\end{bmatrix}
+\]
+
+\noindent
+Therefore
+
+\[
+\boxed{
+\operatorname{Cov}(AX)
+=
+\begin{bmatrix}
+6 & 0 & 0\\
+0 & 18 & 0\\
+0 & 0 & 36
+\end{bmatrix}
+}
+\]
+
+\noindent
+The variances of the three linear combinations are therefore
+
+\[
+\boxed{
+\operatorname{Var}(AX)_1=6
+}
+\]
+
+\[
+\boxed{
+\operatorname{Var}(AX)_2=18
+}
+\]
+
+\[
+\boxed{
+\operatorname{Var}(AX)_3=36
+}
+\]
+
+\noindent
+and all covariances between distinct linear combinations are zero
+
+\[
+\boxed{
+\operatorname{Cov}(AX_i,AX_j)=0
+\qquad
+i\neq j
+}
+\]
+
+\vspace{1cm}
+
+\noindent
+\textbf{(c) Which pairs of linear combinations have zero covariances?}
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{Sol.}
+
+\vspace{0.3cm}
+
+\noindent
+Let the three linear combinations be
+
+\[
+Y_1=X_1-X_2
+\]
+
+\[
+Y_2=X_1+X_2-2X_3
+\]
+
+\[
+Y_3=X_1+X_2+X_3-3X_4
+\]
+
+\noindent
+From the covariance matrix obtained in part (b)
+
+\[
+\operatorname{Cov}(AX)
+=
+\begin{bmatrix}
+6 & 0 & 0\\
+0 & 18 & 0\\
+0 & 0 & 36
+\end{bmatrix}
+\]
+
+\noindent
+we have
+
+\[
+\operatorname{Cov}(Y_1,Y_2)=0
+\]
+
+\[
+\operatorname{Cov}(Y_1,Y_3)=0
+\]
+
+\[
+\operatorname{Cov}(Y_2,Y_3)=0
+\]
+
+\noindent
+Therefore all pairs of linear combinations have zero covariance
+
+\[
+\boxed{
+(Y_1,Y_2)
+\qquad
+(Y_1,Y_3)
+\qquad
+(Y_2,Y_3)
+}
+\]
+
+\end{document}
