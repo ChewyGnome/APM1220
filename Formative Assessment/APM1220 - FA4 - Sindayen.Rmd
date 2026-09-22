@@ -1,0 +1,958 @@
+---
+title: "Formative Assessment 4"
+author: "Sindayen, Lorenzo Danilo V."
+subtitle: "APM1220 - Applied Multivariate Data Analysis"
+date: "September 18, 2026"
+output:
+  pdf_document:
+    latex_engine: xelatex
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(knitr)
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.width = 8,
+  fig.height = 5
+)
+
+set.seed(123)
+```
+
+# Introduction
+
+In this assessment, several multivariate statistical methods will be used to analyze the mean mean vectors, simultaneous confidence intervals, regions, confidence ellipses, and multivariate normality. Additionally, this analysis will also employ the usage of matrix operations, Hotelling's $T^2$ test, Bonferroni confidence intervals, confidence ellipses, Q-Q plots, and scatter diagrams. Noting this, the medium to be used for this assessment is Rmarkdown, with the results presented and interpreted according to the requirements of each task.
+
+# 1. Hotelling's $T^2$ Test for a Mean Vector
+
+Given the data matrix
+
+$$X = \begin{bmatrix} 2 & 12 \\ 8 & 9 \\ 6 & 9 \\ 8 & 10 \end{bmatrix}$$
+
+and the null hypothesis
+
+$$H_0 : \boldsymbol{\mu}' = [7, 11]$$
+
+## (a) Evaluate $T^2$ for testing the null hypothesis $H_0 : \boldsymbol{\mu}' = [7, 11]$
+
+The Hotelling's $T^2$ statistic is
+
+$$T^2 = n(\bar{\mathbf{x}} - \boldsymbol{\mu}_0)' S^{-1} (\bar{\mathbf{x}} - \boldsymbol{\mu}_0)$$
+
+```{r}
+X <- matrix(c(
+  2, 12,
+  8, 9,
+  6, 9,
+  8, 10
+), ncol = 2, byrow = TRUE)
+
+colnames(X) <- c("X1", "X2")
+
+n <- nrow(X)
+p <- ncol(X)
+
+x_bar <- colMeans(X)
+S <- cov(X)
+
+mu0 <- c(7, 11)
+
+T2 <- n * t(x_bar - mu0) %*% solve(S) %*% (x_bar - mu0)
+
+x_bar
+S
+T2
+```
+
+
+## (b) Specify the exact distribution of $T^2$ under the null hypothesis for this situation.
+
+For a sample of size $n$ with $p$ variables,
+
+$$\frac{n - p}{p(n - 1)} T^2 \sim F_{p, n - p}$$
+
+```{r}
+F_statistic <- ((n - p) / (p * (n - 1))) * as.numeric(T2)
+
+F_statistic
+```
+
+For this problem, $n = 4$ and $p = 2$. Therefore,
+
+$$\frac{4 - 2}{2(4 - 1)} T^2 = \frac{1}{3} T^2 \sim F_{2,2}$$
+
+The corresponding $F$-statistic is
+
+$$\boxed{F = 4.5455}$$
+
+Thus, the exact distribution under $H_0$ is
+
+$$\boxed{\frac{1}{3}T^2 \sim F_{2,2}}$$
+
+## (c) Using parts (a) and (b), test $H_0$ at the significance level $\alpha = 0.05$. What statistical conclusion do you reach?
+
+The hypotheses are
+
+$$H_0 : \boldsymbol{\mu}' = [7, 11]$$
+
+and
+
+$$H_1 : \boldsymbol{\mu}' \neq [7, 11]$$
+```{r}
+alpha <- 0.05
+
+# Critical value and p-value
+F_critical <- qf(
+  1 - alpha,
+  df1 = p,
+  df2 = n - p
+)
+
+p_value <- 1 - pf(
+  F_statistic,
+  df1 = p,
+  df2 = n - p
+)
+
+F_critical
+p_value
+```
+
+The results are
+
+$$F_{\text{critical}} = 19.0000$$
+
+and
+
+$$p\text{-value} = 0.1803$$
+
+Since
+
+$$F = 4.5455 < 19.0000$$
+
+and
+
+$$p = 0.1803 > 0.05,$$
+
+we fail to reject $H_0$
+
+Interpretation: At the $5\%$ significance level, there is insufficient evidence to conclude that the population mean vector differs from $[7, 11]'$
+
+
+# 2. Simultaneous Confidence Intervals and Regions for Grizzly Bear Body Measurements
+
+```{r}
+n <- 61
+
+x_bar <- c(
+  Weight = 95.52,
+  `Body Length` = 164.38,
+  Neck = 55.69,
+  Girth = 93.39,
+  `Head Length` = 17.98,
+  `Head Width` = 31.13
+)
+
+S <- matrix(c(
+  3266.46, 1343.97, 731.54, 1175.50, 162.68, 238.37,
+  1343.97, 721.91, 324.25, 537.35, 80.17, 117.73,
+  731.54, 324.25, 179.28, 281.17, 39.15, 56.80,
+  1175.50, 537.35, 281.17, 474.98, 63.73, 94.85,
+  162.68, 80.17, 39.15, 63.73, 9.95, 13.88,
+  238.37, 117.73, 56.80, 94.85, 13.88, 21.26
+), nrow = 6, byrow = TRUE)
+
+rownames(S) <- names(x_bar)
+colnames(S) <- names(x_bar)
+
+x_bar
+S
+```
+
+## (a) Obtain the large-sample 95% simultaneous confidence intervals for the six population mean body measurements.
+
+The large-sample simultaneous confidence interval is
+
+$$\bar{x}_j \pm \sqrt{\frac{\chi_{p, 0.95}^2 s_{jj}}{n}},$$
+
+where $p = 6$
+
+```{r}
+p <- 6
+
+chi_critical <- qchisq(0.95, df = p)
+
+SE <- sqrt(diag(S) / n)
+
+margin <- sqrt(chi_critical) * SE
+
+large_sample_CI <- data.frame(
+  Variable = names(x_bar),
+  Mean = x_bar,
+  Lower = x_bar - margin,
+  Upper = x_bar + margin
+)
+
+kable(
+  large_sample_CI,
+  digits = 3,
+  caption = "Large-Sample 95% Simultaneous Confidence Intervals"
+)
+```
+
+## (b) Obtain the large-sample 95% simultaneous confidence ellipse for mean weight and mean girth.
+
+The confidence ellipse for mean Weight and mean Girth is based on
+
+$$n(\boldsymbol{\mu} - \bar{\mathbf{x}})' S^{-1} (\boldsymbol{\mu} - \bar{\mathbf{x}}) \le \chi_{2, 0.95}^2$$
+
+```{r}
+WG_mean <- x_bar[c("Weight", "Girth")]
+WG_S <- S[c("Weight", "Girth"), c("Weight", "Girth")]
+
+chi_critical_2 <- qchisq(0.95, df = 2)
+
+theta <- seq(0, 2 * pi, length.out = 500)
+
+circle <- rbind(
+  cos(theta),
+  sin(theta)
+)
+
+ellipse <- t(
+  matrix(WG_mean, nrow = 2, ncol = length(theta)) +
+    sqrt(chi_critical_2 / n) *
+    t(chol(WG_S)) %*% circle
+)
+
+ellipse_data <- data.frame(
+  Weight = ellipse[, 1],
+  Girth = ellipse[, 2]
+)
+
+ggplot(ellipse_data, aes(x = Weight, y = Girth)) +
+  geom_path() +
+  geom_point(
+    data = data.frame(
+      Weight = WG_mean["Weight"],
+      Girth = WG_mean["Girth"]
+    ),
+    aes(x = Weight, y = Girth),
+    size = 3
+  ) +
+  labs(
+    title = "95% Confidence Ellipse for Mean Weight and Mean Girth",
+    x = "Weight (kg)",
+    y = "Girth (cm)"
+  ) +
+  theme_minimal()
+```
+
+## (c) Obtain the 95% Bonferroni confidence intervals for the six means in part (a).
+
+For $m = 6$ simultaneous intervals, the Bonferroni confidence interval is
+
+$$\bar{x}_j \pm t_{1 - \alpha / (2m), \, n-1} \sqrt{\frac{s_{jj}}{n}}$$
+
+```{r}
+m <- 6
+
+t_critical <- qt(
+  1 - 0.05 / (2 * m),
+  df = n - 1
+)
+
+bonferroni_margin <- t_critical * SE
+
+bonferroni_CI <- data.frame(
+  Variable = names(x_bar),
+  Mean = x_bar,
+  Lower = x_bar - bonferroni_margin,
+  Upper = x_bar + bonferroni_margin
+)
+
+kable(
+  bonferroni_CI,
+  digits = 3,
+  caption = "95% Bonferroni Confidence Intervals"
+)
+```
+
+## (d) Refer to part (b). Construct the 95% Bonferroni confidence rectangle for mean weight and mean girth using $m = 6$. Compare this rectangle with the simultaneous confidence ellipse in part (b).
+
+Using $m = 6$, the Bonferroni intervals for Weight and Girth form the confidence rectangle
+
+```{r}
+WG_rectangle <- bonferroni_CI[
+  bonferroni_CI$Variable %in% c("Weight", "Girth"),
+]
+
+WG_rectangle
+```
+
+The confidence rectangle is defined by
+
+$$75.553 \le \mu_{\text{Weight}} \le 115.487$$
+
+and
+
+$$85.776 \le \mu_{\text{Girth}} \le 101.004$$
+
+Interpretation: The Bonferroni confidence rectangle is axis-aligned because it is formed from separate confidence intervals for Weight and Girth. In contrast to this, the simultaneous confidence ellipse accounts for the covariance between the two measurements and therefore provides an elliptical joint confidence region.=
+
+
+## (e) Obtain the 95% Bonferroni confidence interval for ($\text{mean head width} - \text{mean head length}$) using $m = 6 + 1 = 7$ to allow for this statement as well as statements about each individual mean.
+
+The estimated difference is
+
+$$\bar{x}_{HW} - \bar{x}_{HL}$$
+
+Using $m = 7$, the Bonferroni interval is
+
+$$(\bar{x}_{HW} - \bar{x}_{HL}) \pm t_{1 - \alpha / (2m), \, n-1} \sqrt{\frac{s_{HW, HW} + s_{HL, HL} - 2s_{HW, HL}}{n}}$$
+```{r}
+difference <- x_bar["Head Width"] - x_bar["Head Length"]
+
+difference_SE <- sqrt(
+  (
+    S["Head Width", "Head Width"] +
+    S["Head Length", "Head Length"] -
+    2 * S["Head Width", "Head Length"]
+  ) / n
+)
+
+m <- 7
+
+t_critical_7 <- qt(
+  1 - 0.05 / (2 * m),
+  df = n - 1
+)
+
+difference_margin <- t_critical_7 * difference_SE
+
+difference_CI <- c(
+  Lower = difference - difference_margin,
+  Upper = difference + difference_margin
+)
+
+difference
+difference_SE
+difference_CI
+```
+
+The estimated difference is
+
+$$31.13 - 17.98 = 13.15$$
+
+The resulting $95\%$ Bonferroni confidence interval is
+
+$$\boxed{(12.488, 13.812)}$$
+
+
+
+# 3. Mineral Analysis of Ancient Peruvian Hairs
+
+## (a) Construct and plot a 90% joint confidence ellipse for the population mean vector $\boldsymbol{\mu}' = [\mu_1, \mu_2]$, assuming these nine hairs represent a random sample from a particular ancient Peruvian culture.
+
+```{r}
+hair <- matrix(c(
+  0.48, 12.57,
+  40.53, 73.68,
+  2.19, 11.13,
+  0.55, 20.03,
+  0.74, 20.29,
+  0.66, 0.78,
+  0.93, 4.64,
+  0.37, 0.43,
+  0.22, 1.08
+), ncol = 2, byrow = TRUE)
+
+colnames(hair) <- c("Cr", "St")
+
+n <- nrow(hair)
+p <- ncol(hair)
+
+x_bar <- colMeans(hair)
+S <- cov(hair)
+
+x_bar
+S
+```
+
+The sample mean vector is
+
+$$\bar{\mathbf{x}} = \begin{bmatrix} 5.1856 \\ 16.0700 \end{bmatrix}$$
+
+and the sample covariance matrix is
+
+$$S = \begin{bmatrix} 176.0042 & 287.2412 \\ 287.2412 & 527.8493 \end{bmatrix}$$
+
+For a 90% Hotelling confidence region,
+
+$$n(\boldsymbol{\mu} - \bar{\mathbf{x}})' S^{-1} (\boldsymbol{\mu} - \bar{\mathbf{x}}) \le \frac{p(n - 1)}{n - p} F_{p, n - p}(0.90)$$
+
+```{r}
+F_critical <- qf(0.90, df1 = p, df2 = n - p)
+
+T2_critical <- (p * (n - 1) / (n - p)) * F_critical
+
+F_critical
+T2_critical
+```
+
+The critical value is
+
+$$F_{2,7}(0.90) = 3.2574$$
+
+and therefore
+
+$$T^2_{\text{critical}} = 7.4456$$
+
+```{r}
+theta <- seq(0, 2 * pi, length.out = 500)
+
+eigen_S <- eigen(S)
+
+ellipse <- t(
+  matrix(x_bar, nrow = 2, ncol = length(theta)) +
+    sqrt(T2_critical / n) *
+    eigen_S$vectors %*%
+    diag(sqrt(eigen_S$values)) %*%
+    rbind(cos(theta), sin(theta))
+)
+
+ellipse_data <- data.frame(
+  Cr = ellipse[, 1],
+  St = ellipse[, 2]
+)
+
+ggplot(ellipse_data, aes(x = Cr, y = St)) +
+  geom_path() +
+  geom_point(
+    data = data.frame(
+      Cr = x_bar["Cr"],
+      St = x_bar["St"]
+    ),
+    aes(x = Cr, y = St),
+    size = 3
+  ) +
+  labs(
+    title = "90% Joint Confidence Ellipse for Mean Chromium and Strontium",
+    x = "Chromium (ppm)",
+    y = "Strontium (ppm)"
+  ) +
+  theme_minimal()
+```
+
+## (b) Obtain the individual simultaneous 90% confidence intervals for $\mu_1$ and $\mu_2$ by projecting the ellipse constructed in part (a) onto each coordinate axis. Does it appear as if this Peruvian culture has a mean strontium level of 10? That is, are any of the points ($\mu_1$ arbitrary, 10) in the confidence region? Is $[.30, 10]'$ a plausible value for $\boldsymbol{\mu}$? Discuss.
+
+The individual simultaneous confidence intervals are obtained by projecting the confidence ellipse onto each coordinate axis:
+
+$$\bar{x}_j \pm \sqrt{\frac{T^2_{\text{critical}} s_{jj}}{n}}$$
+
+```{r}
+SE <- sqrt(diag(S) / n)
+
+margin <- sqrt(T2_critical) * SE
+
+simultaneous_CI <- data.frame(
+  Variable = c("Chromium", "Strontium"),
+  Mean = x_bar,
+  Lower = x_bar - margin,
+  Upper = x_bar + margin
+)
+
+kable(
+  simultaneous_CI,
+  digits = 4,
+  caption = "90% Simultaneous Confidence Intervals"
+)
+```
+
+The projected 90% simultaneous confidence intervals are approximately
+
+$$-6.8812 \le \mu_{Cr} \le 17.2523$$
+
+and
+
+$$-4.8270 \le \mu_{St} \le 36.9670$$
+
+The proposed mean strontium value is 10
+
+```{r}
+10 >= simultaneous_CI$Lower[2] &&
+10 <= simultaneous_CI$Upper[2]
+```
+
+The value 10 is within the projected confidence interval for mean strontium.
+
+Interpretation: A population mean strontium concentration of 10 is consistent with the 90% simultaneous confidence region.
+
+To determine whether
+
+$$\begin{bmatrix} 0.30 \\ 10 \end{bmatrix}$$
+
+is plausible as a joint population mean vector, the point is evaluated against the confidence ellipse.
+
+```{r}
+proposed_mean <- c(0.30, 10)
+
+T2_proposed <- n *
+  t(proposed_mean - x_bar) %*%
+  solve(S) %*%
+  (proposed_mean - x_bar)
+
+T2_proposed <- as.numeric(T2_proposed)
+
+T2_proposed
+T2_proposed <= T2_critical
+```
+
+The calculated value is
+
+$$T^2 = 1.7725,$$
+
+which is less than the critical value
+
+$$7.4456$$
+
+Interpretation: The mean vector $[0.30, 10]'$ lies within the 90% joint confidence ellipse and is therefore plausible based on the sample.
+
+## (c) Do these data appear to be bivariate normal? Discuss their status with reference to $Q-Q$ plots and a scatter diagram. If the data are not bivariate normal, what implications does this have for the results in parts (a) and (b)?
+
+```{r}
+qqnorm(hair[, "Cr"],
+       main = "Q-Q Plot for Chromium")
+qqline(hair[, "Cr"])
+
+qqnorm(hair[, "St"],
+       main = "Q-Q Plot for Strontium")
+qqline(hair[, "St"])
+  
+ggplot(as.data.frame(hair), aes(x = Cr, y = St)) +
+  geom_point(size = 3) +
+  labs(
+    title = "Scatter Diagram of Chromium and Strontium",
+    x = "Chromium (ppm)",
+    y = "Strontium (ppm)"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+mahalanobis_distances <- mahalanobis(
+  hair,
+  center = x_bar,
+  cov = S
+)
+
+theoretical <- qchisq(
+  ppoints(n),
+  df = p
+)
+
+qqplot(
+  theoretical,
+  sort(mahalanobis_distances),
+  main = "Chi-Square Q-Q Plot",
+  xlab = "Theoretical Chi-Square Quantiles",
+  ylab = "Observed Squared Mahalanobis Distances"
+)
+
+abline(0, 1)
+```
+
+Interpretation: From what can be inferred, the data does not appear to be bivariate  because the Q-Q plots show noticeable departures from the expected straight-line pattern, while the scatter diagram shows an obvious outlier at (40.53, 73.68). Since bivariate normality is questionable, the 90% confidence ellipse in part (a) and the simultaneous 90% confidence intervals in part (b) may not have their stated coverage probability, so the results of both parts should be interpreted with caution.
+
+## (d) Repeat the analysis with the obvious "outlying" observation removed. Do the inferences change? Comment.
+
+```{r}
+outlier <- which.max(hair[, "Cr"])
+
+hair_clean <- hair[-outlier, ]
+
+n_clean <- nrow(hair_clean)
+
+x_bar_clean <- colMeans(hair_clean)
+S_clean <- cov(hair_clean)
+
+x_bar_clean
+```
+
+```{r}
+F_critical_clean <- qf(
+  0.90,
+  df1 = 2,
+  df2 = n_clean - 2
+)
+
+T2_critical_clean <-
+  (2 * (n_clean - 1) / (n_clean - 2)) *
+  F_critical_clean
+
+F_critical_clean
+T2_critical_clean
+```
+
+```{r}
+theta <- seq(0, 2 * pi, length.out = 500)
+
+eigen_clean <- eigen(S_clean)
+
+ellipse_clean <- t(
+  matrix(
+    x_bar_clean,
+    nrow = 2,
+    ncol = length(theta)
+  ) +
+    sqrt(T2_critical_clean / n_clean) *
+    eigen_clean$vectors %*%
+    diag(sqrt(eigen_clean$values)) %*%
+    rbind(cos(theta), sin(theta))
+)
+
+ellipse_clean_data <- data.frame(
+  Cr = ellipse_clean[, 1],
+  St = ellipse_clean[, 2]
+)
+
+ggplot(ellipse_clean_data, aes(x = Cr, y = St)) +
+  geom_path() +
+  geom_point(
+    data = data.frame(
+      Cr = x_bar_clean["Cr"],
+      St = x_bar_clean["St"]
+    ),
+    aes(x = Cr, y = St),
+    size = 3
+  ) +
+  labs(
+    title = "90% Confidence Ellipse After Removing the Outlier",
+    x = "Chromium (ppm)",
+    y = "Strontium (ppm)"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+SE_clean <- sqrt(diag(S_clean) / n_clean)
+
+margin_clean <- sqrt(T2_critical_clean) * SE_clean
+
+simultaneous_CI_clean <- data.frame(
+  Variable = c("Chromium", "Strontium"),
+  Mean = x_bar_clean,
+  Lower = x_bar_clean - margin_clean,
+  Upper = x_bar_clean + margin_clean
+)
+
+kable(
+  simultaneous_CI_clean,
+  digits = 4,
+  caption = "90% Simultaneous Confidence Intervals After Removing the Outlier"
+)
+```
+
+```{r}
+qqnorm(hair_clean[, "Cr"],
+       main = "Q-Q Plot for Chromium After Removing Outlier")
+qqline(hair_clean[, "Cr"])
+
+qqnorm(hair_clean[, "St"],
+       main = "Q-Q Plot for Strontium After Removing Outlier")
+qqline(hair_clean[, "St"])
+
+# Scatter diagram after removing the outlier
+ggplot(as.data.frame(hair_clean), aes(x = Cr, y = St)) +
+  geom_point(size = 3) +
+  labs(
+    title = "Scatter Diagram After Removing the Outlier",
+    x = "Chromium (ppm)",
+    y = "Strontium (ppm)"
+  ) +
+  theme_minimal()
+```
+
+Interpretation: Removing the outlier substantially changes the results. The mean chromium concentration decreases from $5.1856$ to $0.7675\text{ ppm}$, while the mean strontium concentration decreases from $16.0700$ to $8.8688\text{ ppm}$. The confidence region and intervals become much smaller, and the remaining observations show a pattern more consistent with the assumptions of the analysis.
+
+# 4. Lumber Strength Measurements
+
+## (a) Construct and sketch a 95% confidence ellipse for the pair $[\mu_1, \mu_2]'$, where $\mu_1 = E(X_1)$ and $\mu_2 = E(X_2)$.
+
+The sample mean vector is
+
+$$\bar{\mathbf{x}} = \begin{bmatrix} \bar{x}_1 \\ \bar{x}_2 \end{bmatrix}$$
+
+and the 95% confidence ellipse is defined by
+
+$$n(\boldsymbol{\mu} - \bar{\mathbf{x}})' S^{-1} (\boldsymbol{\mu} - \bar{\mathbf{x}}) \le \frac{p(n - 1)}{n - p} F_{p, n - p}(0.95)$$
+
+```{r}
+lumber <- matrix(c(
+  1232, 4175,
+  1712, 7749,
+  1115, 6652,
+  1932, 6818,
+  2205, 7612,
+  1820, 9307,
+  1897, 10914,
+  1900, 6457,
+  1932, 10850,
+  2426, 10102,
+  1612, 7627,
+  1558, 7414,
+  1598, 6954,
+  1470, 7556,
+  1804, 8365,
+  1858, 7833,
+  1752, 9469,
+  1587, 8309,
+  2067, 6410,
+  2208, 9559,
+  2365, 10327,
+  1487, 6255,
+  1646, 7320,
+  2206, 10723,
+  1579, 8196,
+  2332, 5430,
+  1880, 9709,
+  2540, 12090,
+  1773, 10370,
+  2322, 10072
+), ncol = 2, byrow = TRUE)
+
+colnames(lumber) <- c("Stiffness", "Bending")
+
+n <- nrow(lumber)
+p <- ncol(lumber)
+
+x_bar <- colMeans(lumber)
+S <- cov(lumber)
+
+x_bar
+S
+```
+
+The sample mean vector is
+
+$$\bar{\mathbf{x}} = \begin{bmatrix} 1860.50 \\ 8354.13 \end{bmatrix}$$
+
+and the sample covariance matrix is
+
+$$S = \begin{bmatrix} 124054.67 & 361620.45 \\ 361620.45 & 3486333.15 \end{bmatrix}$$
+
+```{r}
+F_critical <- qf(
+  0.95,
+  df1 = p,
+  df2 = n - p
+)
+
+T2_critical <- 
+  (p * (n - 1) / (n - p)) * F_critical
+
+F_critical
+T2_critical
+```
+
+The critical value is
+
+$$T^2_{\text{critical}} = 6.9194$$
+
+```{r}
+theta <- seq(0, 2 * pi, length.out = 500)
+
+eigen_S <- eigen(S)
+
+ellipse <- t(
+  matrix(
+    x_bar,
+    nrow = 2,
+    ncol = length(theta)
+  ) +
+    sqrt(T2_critical / n) *
+    eigen_S$vectors %*%
+    diag(sqrt(eigen_S$values)) %*%
+    rbind(cos(theta), sin(theta))
+)
+
+ellipse_data <- data.frame(
+  Stiffness = ellipse[, 1],
+  Bending = ellipse[, 2]
+)
+
+ggplot(
+  ellipse_data,
+  aes(x = Stiffness, y = Bending)
+) +
+  geom_path() +
+  geom_point(
+    data = data.frame(
+      Stiffness = x_bar["Stiffness"],
+      Bending = x_bar["Bending"]
+    ),
+    aes(x = Stiffness, y = Bending),
+    size = 3
+  ) +
+  labs(
+    title = "95% Confidence Ellipse for Mean Stiffness and Bending Strength",
+    x = "Stiffness",
+    y = "Bending Strength"
+  ) +
+  theme_minimal()
+```
+
+Interpretation: The constructed 95% confidence ellipse is the joint confidence region for $[\mu_1, \mu_2]'$, where $\mu_1 = E(X_1)$ is the population mean stiffness and $\mu_2 = E(X_2)$ is the population mean bending strength. The ellipse is centered at the sample mean vector $(1860.50, 8354.13)$.
+
+## (b) Suppose $\mu_{10} = 2000$ and $\mu_{20} = 10,000$ represent "typical" values for stiffness and bending strength, respectively. Given the result in part (a), are the data consistent with these values? Explain.
+
+The proposed typical values are
+
+$$\boldsymbol{\mu}_0 = \begin{bmatrix} 2000 \\ 10000 \end{bmatrix}$$
+
+```{r}
+mu0 <- c(2000, 10000)
+
+T2_typical <- n *
+  t(mu0 - x_bar) %*%
+  solve(S) %*%
+  (mu0 - x_bar)
+
+T2_typical <- as.numeric(T2_typical)
+
+F_typical <- ((n - p) / (p * (n - 1))) * T2_typical
+
+p_value <- 1 - pf(
+  F_typical,
+  df1 = p,
+  df2 = n - p
+)
+
+T2_typical
+F_typical
+p_value
+```
+
+The calculated values are
+
+$$T^2 = 23.6478$$
+
+and
+
+$$p\text{-value} = 0.00024$$
+
+Since
+
+$$23.6478 > 6.9194$$
+
+and
+
+$$p < 0.05,$$
+
+the proposed mean vector lies outside the 95% confidence ellipse
+
+Interpretation: No, the data is not consistent with the typical values $\mu_{10} = 2000$ and $\mu_{20} = 10,000$. The point $(2000, 10,000)$ lies outside the 95% confidence ellipse from part (a), and the corresponding test gives $p = 0.00024 < 0.05$. Therefore, the sample provides evidence that the population mean stiffness and bending strength are not simultaneously equal to 2000 and 10,000, respectively.
+
+## (c)  Is the bivariate normal distribution a viable population model? Explain with reference to Q − Q plots and a scatter diagram.
+
+```{r}
+# Q-Q plot for Stiffness
+qqnorm(
+  lumber[, "Stiffness"],
+  main = "Q-Q Plot for Stiffness"
+)
+
+qqline(lumber[, "Stiffness"])
+
+
+# Q-Q plot for Bending Strength
+qqnorm(
+  lumber[, "Bending"],
+  main = "Q-Q Plot for Bending Strength"
+)
+
+qqline(lumber[, "Bending"])
+
+
+# Scatter diagram
+ggplot(
+  as.data.frame(lumber),
+  aes(x = Stiffness, y = Bending)
+) +
+  geom_point(size = 3) +
+  labs(
+    title = "Scatter Diagram of Stiffness and Bending Strength",
+    x = "Stiffness",
+    y = "Bending Strength"
+  ) +
+  theme_minimal()
+```
+
+Interpretation: From the distribution above, yes, the bivariate normal distribution appears to be a viable population model for the data. The Q-Q plots show that the observations generally follow the expected straight-line pattern, showing only minor deviations, while the scatter diagram shows a roughly linear positive relationship between stiffness and bending strength and no obvious extreme outliers. Thus, the Q-Q plots and scatter diagram provide reasonable support for assuming bivariate normality.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
