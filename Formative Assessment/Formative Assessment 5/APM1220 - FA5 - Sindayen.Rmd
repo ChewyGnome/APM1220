@@ -1,0 +1,674 @@
+---
+title: "Formative Assessment 5"
+author: "Sindayen, Lorenzo Danilo V."
+subtitle: "APM1220 - Applied Multivariate Data Analysis"
+date: "October 11, 2026"
+output:
+  pdf_document:
+    latex_engine: xelatex
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(knitr)
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.width = 8,
+  fig.height = 5
+)
+
+set.seed(123)
+```
+
+# Introduction
+
+For this assessment, Principal Component Analysis (PCA) will be employed using the dataset of the World Happiness Report 2021 to analyze the underlying dimensions of cross-country well-being. Additionally this analysis will use seven quantitative variables: Ladder Score, Logged GDP per capita, Social Support, Healthy Life Expectancy, Freedom to Make Life Choices, Generosity, and Perceptions of Corruption.
+
+Since each variable are measured on different scales, the variables will be standardized before conducting PCA using the correlation matrix. The analysis will also employ the usages of descriptive statistics, a correlation matrix, eigenvalues, proportions of variance explained, component coefficients, and a scree plot. Afterwards, the appropriate number of principal components will then be determined using the scree plot, the Kaiser criterion, cumulative variance explained, and the interpretability of the components.
+
+# Part A – Data Preparation and Descriptive Analysis
+
+## Identify the number of observations and the seven variables used in the analysis.
+
+```{r}
+happiness <- read.csv(
+  "world-happiness-report-2021.csv",
+  check.names = FALSE
+)
+
+pca_data <- happiness %>%
+  select(
+    `Ladder score`,
+    `Logged GDP per capita`,
+    `Social support`,
+    `Healthy life expectancy`,
+    `Freedom to make life choices`,
+    `Generosity`,
+    `Perceptions of corruption`
+  )
+
+n <- nrow(pca_data)
+p <- ncol(pca_data)
+
+cat("Number of observations:", n, "\n")
+cat("Number of variables:", p, "\n")
+
+names(pca_data)
+```
+
+**Interpretation:**
+The dataset contains 149 observations and 7 quantitative variables, each of the selected variables measures the one of the following: Ladder score, Logged GDP per capita, Social support, Healthy life expectancy, Freedom to make life choices, Generosity, and Perceptions of corruption.
+
+## Compute the mean and standard deviation for each variable.
+
+The sample mean of a variable is
+
+$$
+\bar{x}_j = \frac{1}{n}\sum_{i=1}^{n}x_{ij}
+$$
+
+and its sample standard deviation is
+
+$$
+s_j = \sqrt{\frac{1}{n-1}
+\sum_{i=1}^{n}(x_{ij}-\bar{x}_j)^2}
+$$
+
+```{r}
+descriptive_stats <- data.frame(
+  Variable = names(pca_data),
+  Mean = sapply(pca_data, mean),
+  Standard_Deviation = sapply(pca_data, sd)
+)
+
+kable(
+  descriptive_stats,
+  digits = 3,
+  caption = "Descriptive Statistics of the Seven Variables"
+)
+```
+
+**Interpretation:**
+The descriptive statistics show that the variables have different numerical scales. For example, Healthy Life Expectancy has a mean of 64.993, while Social Support has a mean of 0.815. Generosity has a slightly negative mean of -0.015. These differences in scale support the need to standardize the variables before conducting PCA.
+
+## Explain why the variables should be standardized before conducting PCA.
+
+Standardization transforms each variable into a standardized score using
+
+$$
+z_{ij} = \frac{x_{ij}-\bar{x}_j}{s_j},
+$$
+
+where \(x_{ij}\) is the observed value, \(\bar{x}_j\) is the sample mean, and \(s_j\) is the sample standard deviation of variable \(j\).
+
+```{r}
+# Standardize the seven quantitative variables
+Z <- scale(pca_data)
+
+# Display the means and standard deviations after standardization
+standardization_check <- data.frame(
+  Variable = colnames(Z),
+  Mean = colMeans(Z),
+  Standard_Deviation = apply(Z, 2, sd)
+)
+
+kable(
+  standardization_check,
+  digits = 3,
+  caption = "Verification of Standardized Variables"
+)
+```
+
+**Interpretation:**
+After standardization, each variable has a mean approximately equal to zero and a standard deviation equal to one. This ensures that variables measured on larger numerical scales do not disproportionately influence the principal components. Standardization also makes the PCA equivalent to performing an eigen-decomposition of the correlation matrix of the original variables.
+
+## Produce and briefly describe the correlation matrix. Identify at least two pairs of variables that show relatively strong positive or negative relationships.
+
+The Pearson correlation coefficient between variables \(X_j\) and \(X_k\) is
+
+$$
+r_{jk} =
+\frac{\operatorname{Cov}(X_j,X_k)}
+{s_j s_k}.
+$$
+
+The correlation matrix summarizes the direction and strength of the linear relationships among the seven variables.
+
+```{r}
+# Compute the correlation matrix
+cor_matrix <- cor(pca_data, method = "pearson")
+
+kable(
+  cor_matrix,
+  digits = 3,
+  caption = "Correlation Matrix of the Seven Well-Being Variables"
+)
+```
+
+```{r}
+# Visualize the correlation matrix
+cor_long <- as.data.frame(as.table(cor_matrix))
+
+ggplot(
+  cor_long,
+  aes(x = Var1, y = Var2, fill = Freq)
+) +
+  geom_tile(color = "white") +
+  geom_text(
+    aes(label = sprintf("%.3f", Freq)),
+    size = 3
+  ) +
+  scale_fill_gradient2(
+    low = "steelblue",
+    mid = "white",
+    high = "firebrick",
+    midpoint = 0,
+    limits = c(-1, 1)
+  ) +
+  labs(
+    title = "Correlation Matrix of Well-Being Variables",
+    x = NULL,
+    y = NULL,
+    fill = "Correlation"
+  ) +
+  coord_equal() +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(
+      angle = 45,
+      hjust = 1
+    )
+  )
+```
+
+**Interpretation:**
+The correlation matrix reveals several strong positive relationships with Logged GDP per capita and Healthy Life Expectancy having a correlation of 0.837. This suggests that countries with higher logged GDP per capita tend to have higher healthy life expectancy. Ladder Score is also strongly positively correlated with Logged GDP per capita (0.790), Healthy Life Expectancy (0.768), and Social Support (0.757).
+
+Negative relationships are also present, with Ladder Score and Perceptions of Corruption having a correlation of -0.421. Whilst Freedom to Make Life Choices and Perceptions of Corruption have a correlation of -0.401. Generosity also showed to have relatively weak correlations with most other variables, including Ladder Score (-0.018).
+
+These relationships suggest that several measures of cross-country well-being are associated with one another, supporting the use of PCA to investigate whether the seven variables can be summarized by a smaller number of principal components.
+
+
+# Part B – Principal Component Analysis
+
+## Conduct PCA Using the Correlation Matrix
+
+Principal Component Analysis (PCA) is conducted using the seven standardized quantitative variables. The correlation matrix is used so that all variables contribute on a comparable scale, regardless of their original units.
+
+The standardized value of each observation is calculated as:
+
+$$
+Z_{ij} = \frac{X_{ij} - \bar{X}_j}{s_j}
+$$
+
+where \(X_{ij}\) is the original value, \(\bar{X}_j\) is the mean of variable \(j\), and \(s_j\) is its sample standard deviation.
+
+PCA is performed by decomposing the correlation matrix \(R\):
+
+$$
+R\mathbf{v}_k = \lambda_k\mathbf{v}_k
+$$
+
+where \(\lambda_k\) is the eigenvalue and \(\mathbf{v}_k\) is the corresponding eigenvector.
+
+```{r}
+standardized_data <- scale(pca_data)
+
+cor_matrix <- cor(standardized_data, use = "complete.obs")
+
+pca_result <- eigen(cor_matrix)
+
+round(cor_matrix, 3)
+```
+
+## Report the Eigenvalues of the Seven Principal Components
+
+The eigenvalues measure the amount of total variance captured by each principal component. Because seven standardized variables are analyzed, the total variance is seven.
+
+$$
+\sum_{k=1}^{7}\lambda_k = 7
+$$
+
+```{r}
+eigenvalues <- pca_result$values
+
+eigenvalue_table <- data.frame(
+  Component = paste0("PC", 1:7),
+  Eigenvalue = eigenvalues
+)
+
+kable(
+  transform(eigenvalue_table,
+            Eigenvalue = round(Eigenvalue, 3)),
+  caption = "Eigenvalues of the Seven Principal Components"
+)
+```
+
+**Interpretation:** 
+PC1 has the largest eigenvalue, followed by PC2, the remaining components have progressively smaller eigenvalues, suggesting that the first components encapsulates more of the total variation in the data than the later components.
+
+## Report the Proportion of Variance Explained by Each Component
+
+The proportion of variance explained by component \(k\) is calculated by dividing its eigenvalue by the total variance:
+
+$$
+\text{Proportion of Variance}_k
+= \frac{\lambda_k}{\sum_{j=1}^{7}\lambda_j}
+= \frac{\lambda_k}{7}
+$$
+
+```{r}
+proportion_variance <- eigenvalues / sum(eigenvalues)
+
+proportion_table <- data.frame(
+  Component = paste0("PC", 1:7),
+  Eigenvalue = eigenvalues,
+  Proportion_Variance = proportion_variance
+)
+
+kable(
+  transform(
+    proportion_table,
+    Eigenvalue = round(Eigenvalue, 3),
+    Proportion_Variance = round(Proportion_Variance, 3)
+  ),
+  caption = "Proportion of Variance Explained by Each Component"
+)
+```
+
+**Interpretation:** 
+PC1 explains approximately 55.9% of the total variance, while PC2 explains approximately 18.4%. Each subsequent component decreases accounting for a smaller proportion of the total variance.
+
+## Report the Cumulative Proportion of Variance Explained
+
+The cumulative proportion of variance explained is the sum of the individual proportions up to a given component:
+
+$$
+\text{Cumulative Proportion}_k
+= \sum_{j=1}^{k}\frac{\lambda_j}{7}
+$$
+
+```{r}
+cumulative_variance <- cumsum(proportion_variance)
+
+cumulative_table <- data.frame(
+  Component = paste0("PC", 1:7),
+  Proportion_Variance = proportion_variance,
+  Cumulative_Variance = cumulative_variance
+)
+
+kable(
+  transform(
+    cumulative_table,
+    Proportion_Variance = round(Proportion_Variance, 3),
+    Cumulative_Variance = round(Cumulative_Variance, 3)
+  ),
+  caption = "Individual and Cumulative Proportion of Variance Explained"
+)
+```
+
+**Interpretation:** 
+The first two principal components jointly explain approximately 74.3% of the total variance, including PC3 raises the cumulative proportion to approximately 84.4%. Thus, two components provide a substantial summary of the original seven variables, while three components retain more of the total variation.
+
+## Present the Eigenvectors/Component Coefficients for the Retained Components
+
+The eigenvectors provide the coefficients used to form the principal components from the standardized variables. For the first two components:
+
+$$
+PC_k = v_{1k}Z_1 + v_{2k}Z_2 + \cdots + v_{7k}Z_7
+$$
+For this section, the first two components are presented because their eigenvalues exceed 1 and together explain approximately 74.3% of the total variance.
+
+```{r}
+eigenvectors <- pca_result$vectors[, 1:2]
+
+if (eigenvectors[1, 1] < 0) {
+  eigenvectors[, 1] <- -eigenvectors[, 1]
+}
+
+if (eigenvectors[6, 2] < 0) {
+  eigenvectors[, 2] <- -eigenvectors[, 2]
+}
+
+coefficient_table <- data.frame(
+  Variable = rownames(cor_matrix),
+  PC1 = eigenvectors[, 1],
+  PC2 = eigenvectors[, 2],
+  row.names = NULL
+)
+
+kable(
+  transform(
+    coefficient_table,
+    PC1 = round(PC1, 3),
+    PC2 = round(PC2, 3)
+  ),
+  caption = "Eigenvectors / Component Coefficients for PC1 and PC2"
+)
+```
+
+**Interpretation:** 
+PC1 has relatively large positive coefficients for Ladder score, Logged GDP per capita, Healthy life expectancy, and Social support. While PC2 has its largest positive coefficient for Generosity and a negative coefficient for Perceptions of corruption. These coefficients suggest how each standardized variable contributes to the respective component; their signs describe the direction of contribution, not causation.
+
+## Identify the Variables with the Largest Absolute Coefficients in the First Principal Component
+
+The absolute values of the PC1 coefficients indicate the relative magnitude of each variable's contribution to the first component. The variables are ranked using:
+
+$$
+|v_{j1}|
+$$
+
+where \(v_{j1}\) is the coefficient of variable \(j\) in PC1.
+
+```{r}
+pc1_importance <- data.frame(
+  Variable = rownames(cor_matrix),
+  PC1_Coefficient = eigenvectors[, 1],
+  Absolute_Coefficient = abs(eigenvectors[, 1])
+) %>%
+  arrange(desc(Absolute_Coefficient))
+
+kable(
+  transform(
+    pc1_importance,
+    PC1_Coefficient = round(PC1_Coefficient, 3),
+    Absolute_Coefficient = round(Absolute_Coefficient, 3)
+  ),
+  caption = "Variables Ranked by Absolute PC1 Coefficients"
+)
+```
+
+**Interpretation:** 
+The variables with the largest absolute coefficients in PC1 are Ladder score, Logged GDP per capita, Healthy life expectancy, and Social support. These variables contribute most strongly to the first principal component. Together with the positive coefficient for Freedom to make life choices, their pattern supports interpreting PC1 as a general well-being and socioeconomic advantage dimension.
+
+
+# Part C – Determining the Number of Components
+
+## Construct a Scree Plot of the Eigenvalues
+
+A scree plot displays the eigenvalues of the principal components in descending order. It helps determine how much variance each component captures and where the contribution of additional components begins to decrease substantially.
+
+The eigenvalues are ordered such that:
+
+$$
+\lambda_1 \geq \lambda_2 \geq \cdots \geq \lambda_7
+$$
+
+```{r}
+scree_data <- data.frame(
+  Component = 1:7,
+  Eigenvalue = eigenvalues
+)
+
+ggplot(scree_data, aes(x = Component, y = Eigenvalue)) +
+  geom_line() +
+  geom_point(size = 3) +
+  geom_hline(yintercept = 1, linetype = "dashed") +
+  scale_x_continuous(breaks = 1:7) +
+  labs(
+    title = "Scree Plot of Principal Component Eigenvalues",
+    x = "Principal Component",
+    y = "Eigenvalue"
+  ) +
+  theme_minimal()
+```
+
+
+**Interpretation:** 
+The scree plot shows that PC1 has the largest eigenvalue, followed by a substantial decrease at PC2. The eigenvalues decline more gradually after PC2, suggesting that the first two components capture the most prominent patterns of variation in the data.
+
+## Identify the Apparent Elbow in the Scree Plot (2 points)
+
+The elbow is the point where the eigenvalue curve changes from a relatively steep decline to a more gradual decrease.
+
+```{r}
+kable(
+  data.frame(
+    Component = paste0("PC", 1:7),
+    Eigenvalue = round(eigenvalues, 3)
+  ),
+  caption = "Eigenvalues Used to Identify the Scree Plot Elbow"
+)
+```
+
+
+**Interpretation:**
+The apparent elbow occurs around PC2 to PC3 because the eigenvalues decrease sharply from PC1 to PC2 and then fall below 1 at PC3, after which the decline is becomes more apparent. This suggests that retaining the first two principal components seems to be the most appropriate approach.
+
+## Apply the Kaiser Criterion
+
+The Kaiser criterion retains components with eigenvalues greater than 1:
+
+$$
+\lambda_k > 1
+$$
+
+This criterion is commonly applied to PCA based on a correlation matrix because each standardized variable contributes one unit of variance.
+
+```{r}
+kaiser_table <- data.frame(
+  Component = paste0("PC", 1:7),
+  Eigenvalue = eigenvalues,
+  Retain = eigenvalues > 1
+)
+
+kable(
+  transform(
+    kaiser_table,
+    Eigenvalue = round(Eigenvalue, 3)
+  ),
+  caption = "Kaiser Criterion for Component Retention"
+)
+
+retained_kaiser <- which(eigenvalues > 1)
+paste("Components retained:", paste0("PC", retained_kaiser, collapse = ", "))
+```
+
+## Determine an Appropriate Number of Components to Retain (2 points)
+
+The decision considers the scree plot, the Kaiser criterion, and the cumulative proportion of variance explained.
+
+The cumulative proportion explained by the first \(k\) components is:
+
+$$
+C_k = \sum_{j=1}^{k}\frac{\lambda_j}{7}
+$$
+
+```{r}
+retention_table <- data.frame(
+  Component = paste0("PC", 1:7),
+  Eigenvalue = eigenvalues,
+  Proportion_Variance = proportion_variance,
+  Cumulative_Variance = cumulative_variance
+)
+
+kable(
+  transform(
+    retention_table,
+    Eigenvalue = round(Eigenvalue, 3),
+    Proportion_Variance = round(Proportion_Variance, 3),
+    Cumulative_Variance = round(Cumulative_Variance, 3)
+  ),
+  caption = "Summary for Selecting the Number of Principal Components"
+)
+```
+
+**Interpretation:** 
+From the results above, two principal components seems to be the most appropriate number of components to retain. This decision is supported by the apparent elbow around PC2–PC3 and the Kaiser criterion, which retains PC1 and PC2. Together, the first two components explain approximately 74.3% of the total variance, providing a substantial summary of the original seven variables. Retaining a third component would increase the cumulative variance explained to approximately 84.4%, but PC3 has an eigenvalue below 1 and contributes less variance than an individual standardized variable.
+
+## Explain Why Multiple Criteria Should Be Used
+
+The number of components should not be determined using only one criterion because each method has limitations. The scree plot relies partly on visual judgment, the Kaiser criterion uses a fixed eigenvalue threshold, and cumulative variance depends on how much information the researcher wants to preserve. Considering all three provides a more balanced decision and reduces the risk of retaining too many or too few components.
+
+
+# Part D – Interpretation of Principal Components
+
+## Interpret Principal Component 1 (PC1)
+
+Principal Component 1 is a linear combination of the seven standardized variables:
+
+$$
+PC_1 = \sum_{j=1}^{7} v_{j1}Z_j
+$$
+
+where \(v_{j1}\) represents the coefficient of variable \(j\) in PC1 and \(Z_j\) represents its standardized value.
+
+```{r}
+# Display PC1 coefficients in descending order of absolute magnitude
+pc1_interpretation <- data.frame(
+  Variable = rownames(cor_matrix),
+  Coefficient = eigenvectors[, 1]
+) %>%
+  arrange(desc(abs(Coefficient)))
+
+kable(
+  transform(
+    pc1_interpretation,
+    Coefficient = round(Coefficient, 3)
+  ),
+  caption = "PC1 Coefficients Ranked by Absolute Magnitude"
+)
+```
+
+**Interpretation:** 
+PC1 has its largest positive coefficients for Ladder score (0.464), Logged GDP per capita (0.459), Healthy life expectancy (0.453), and Social support (0.433). Freedom to make life choices also has a positive coefficient (0.341). Perceptions of corruption has a negative coefficient (-0.252), while Generosity has a coefficient close to zero (-0.042). Therefore, PC1 primarily represents a dimension of cross-country well-being associated with higher reported life evaluations, greater economic prosperity, longer healthy life expectancy, stronger social support, and greater freedom. The negative coefficient for Perceptions of corruption indicates an opposing direction along this component, while Generosity contributes very little to PC1.
+
+## Interpret Principal Component 2 (PC2)
+
+Principal Component 2 is another linear combination of the standardized variables:
+
+$$
+PC_2 = \sum_{j=1}^{7} v_{j2}Z_j
+$$
+
+```{r}
+# Display PC2 coefficients in descending order of absolute magnitude
+pc2_interpretation <- data.frame(
+  Variable = rownames(cor_matrix),
+  Coefficient = eigenvectors[, 2]
+) %>%
+  arrange(desc(abs(Coefficient)))
+
+kable(
+  transform(
+    pc2_interpretation,
+    Coefficient = round(Coefficient, 3)
+  ),
+  caption = "PC2 Coefficients Ranked by Absolute Magnitude"
+)
+```
+
+**Interpretation:** 
+PC2 is dominated by Generosity (0.753), followed by Perceptions of corruption (-0.460) and Freedom to make life choices (0.365). Logged GDP per capita (-0.197), Social support (-0.163), and Healthy life expectancy (-0.146) have smaller negative coefficients, while Ladder score (0.040) contributes very little. Thus, PC2 mainly contrasts higher Generosity and Freedom to make life choices with higher values of the Perceptions of corruption variable, while the remaining variables contribute less strongly. This component describes a different pattern of variation from PC1 and should not be interpreted as evidence of a causal relationship.
+
+## Give a Descriptive Name or Label for PC1 and Explain the Choice
+
+**Proposed label: General Well-Being and Socioeconomic Advantage**
+
+PC1 is labeled General Well-Being and Socioeconomic Advantage because its largest positive coefficients correspond to Ladder score, Logged GDP per capita, Healthy life expectancy, and Social support with Freedom to make life choices also contributing positively. These variables collectively represent life evaluation, economic conditions, health, social support, and personal freedom. The label summarizes the dominant pattern in PC1 without suggesting that any one variable causes another.
+
+## Explain How Many Original Variables Can Potentially Be Represented by the Retained Components
+
+The analysis retains two principal components from the original seven variables. Each component is a weighted combination of all seven standardized variables, although some variables contribute more strongly than others.
+
+$$
+\text{Original variables} = 7
+$$
+
+$$
+\text{Retained components} = 2
+$$
+
+**Interpretation:** 
+The two retained components (PC1 & PC2) summarize the information in all seven original variables using two new dimensions. Therefore, the seven original variables are represented by two components, achieving dimensionality reduction from seven variables to two while preserving approximately 74.3% of the total variance. Noting this, the two components still does not reproduce every original value exactly; with approximately 25.7% of the total variance not captured by the first two components.
+
+## Underlying Dimensions of Cross-Country Well-Being
+
+**Conclusion:** 
+PCA reveals that cross-country well-being in the 2021 World Happiness Report can be summarized by two principal dimensions. PC1 represents general well-being and socioeconomic advantage, with strong positive contributions from life evaluation, GDP per capita, healthy life expectancy, social support, and freedom. PC2 captures a contrasting pattern involving generosity, freedom, and perceptions of corruption that is largely distinct from the dominant PC1 pattern. Together, these two components explain approximately 74.3% of the total variance among the seven variables. This indicates that a substantial amount of the variation in cross-country well-being can be summarized in two dimensions, while the remaining variation is distributed across the other five components.
+
+# Overall Conclusion
+
+Concluding this report, the Principal Component Analysis (PCA) of the 2021 World Happiness Report examined seven quantitative variables across 149 countries to identify the several underlying dimensions of cross-country well-being. The correlation analysis revealed several notable relationships among life evaluation, GDP per capita, social support, and healthy life expectancy. Using the correlation matrix of standardized variables, PCA identified two principal components (PC1 & PC2) that covered approximately 74.3% of the total variance. Overall, the results demonstrate that cross-country well-being can be summarized using two dimensions, simplifying the original seven variables while preserving a substantial amount of information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
